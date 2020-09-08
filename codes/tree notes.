@@ -1,0 +1,113 @@
+Tree notes:
+
+1.height of a tree:
+//solved in hackerrank interview preperation.
+public static int height(Node root) {
+          if(root==null)
+            return -1;//This should be zero.
+            return Math.max(1+height(root.left),1+height(root.right));
+}
+
+--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--x
+2.Least Common Ancestor of given nodes:
+
+My Solution - complex
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+public static Node lca(Node root, int v1, int v2) {
+      	// Write your code here.
+          Node x;
+          boolean flag=false;
+	//flag determines if root value is v1 or v2 or not.          
+          if(root.data==v1||root.data==v2)
+            flag=true;
+          boolean r=check(root.right,v1,v2);//if right side has the element v1 or v2/
+          boolean l=check(root.left,v1,v2);//if left side of the tree has element v1 or v2.
+          if(r&&l||flag&&r||flag&&l)//if both right and left contains v1 or v2 each
+            return root;
+          if(!r)//if right does not contain v1 or v2 then check only in left side of the tree.
+            x=lca(root.left,v1,v2);
+          else
+            x=lca(root.right,v1,v2);//if left does not contain v1 or v2 then check only in right side of the tree.
+        return x;
+    }
+    //check function is to check if the left or right side of the tree contains the node v1 or v2.
+    public static boolean check(Node root,int v1, int v2){
+        if(root==null)
+            return false;
+        if(root.data==v1||root.data==v2)
+            return true;
+        if(root.right!=null){
+            if(root.right.data==v1||root.right.data==v2)
+                return true;
+        }
+        if(root.left!=null){
+            if(root.left.data==v1||root.left.data==v2)
+                return true;
+        }
+            boolean r=check(root.right,v1,v2);
+            boolean l=check(root.left,v1,v2);
+            if(l||r)//if either left or right contains the node v1 or v2 return true.
+                return true;
+            return false;
+
+    }
+----------------------------------------------------------------------------------------------------------------------------------------------------   
+Simpler Solution
+
+static Node lca(Node root,int v1,int v2)
+{
+    //Decide if you have to call recursively
+    //Samller than both
+    if(root.data < v1 && root.data < v2){
+        return lca(root.right,v1,v2);
+    }
+    //Bigger than both
+    if(root.data > v1 && root.data > v2){
+        return lca(root.left,v1,v2);
+    }
+
+    //Else solution already found
+    return root;
+}
+
+--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--
+
+Question:First Merge Node.
+Note the data that merges but the pointer that merges.. i.e the two linked list merge to form a single linked list.
+
+Test Case 0
+
+ 1
+  \
+   2--->3--->NULL
+  /
+ 1
+Test Case 1
+
+1--->2
+      \
+       3--->Null
+      /
+     1Solved it using arrayList and getting the index of first common pointer to the linked list.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+static int findMergeNode(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
+        ArrayList<SinglyLinkedListNode> a=new ArrayList<>();
+        while(head1!=null){
+            a.add(head1);
+            head1=head1.next;
+        }
+        int n=head2.data,index=Integer.MAX_VALUE;
+        while(head2!=null){
+            if(a.contains(head2)){
+                if(index>a.indexOf(head2)){
+                    n=head2.data;
+                    index=a.indexOf(head2);
+                }
+            }
+            head2=head2.next;
+        }
+        return n;
+}
+
+--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--xx--
+ 
